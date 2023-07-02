@@ -1,0 +1,8 @@
+extends layout
+
+block content
+console.log(message);
+console.log(error.status)
+  h1= message
+  h2= error.status
+  pre #{error.stack}
