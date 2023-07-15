@@ -1,2 +1,10 @@
-.env
+config.json
+.env.development
+.env.production
+
 /node_modules
+/.yarn
+/dist
+
+.pnp.cjs
+.pnp.loader.mjs

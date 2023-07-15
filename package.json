@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "build": "babel src --out-dir dist --copy-files && babel ./src/bin/www --out-file ./dist/bin/www",
+    "start": "node ./dist/bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -19,6 +20,9 @@
     "pg": "^8.11.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.22.9",
+    "@babel/core": "^7.22.9",
+    "@babel/preset-env": "^7.22.9",
     "nodemon": "^2.0.22"
   }
 }

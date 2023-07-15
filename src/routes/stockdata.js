@@ -29,12 +29,12 @@ router.get("/", (req, res, next) => {
 });
 
 router.get("/all", async (req, res, next) => {
-  stockData = {};
+  const stockData = {};
   try {
-    tables = await getData("show tables");
+    const tables = await getData("show tables");
     for (const table of tables) {
       const tablename = table["Tables_in_stock"];
-      tableData = await getData(
+      const tableData = await getData(
         `select * from ${tablename} order by time desc limit 20`
       );
       stockData[tablename] = tableData;
