@@ -19,14 +19,17 @@ router.use((req, res, next) => {
 router.get("/", (req, res, next) => {
   const query_data = req.query;
   const query_str = `SELECT * FROM ${query_data.stock_idx} WHERE time BETWEEN "${query_data.from}" AND "${query_data.to}"`;
-  pool.query(query_str, (err, result) => {
-    if (err) {
-      console.log(query_str);
-      console.log(query_data);
-      console.log(err);
-      res.status(500).send({ message: err.message });
-    }
-    res.status(200).json(result);
+  pool.getConnection((err, conn) => {
+    conn.query(query_str, (err, result) => {
+      if (err) {
+        console.log(query_str);
+        console.log(query_data);
+        console.log(err);
+        res.status(500).send({ message: err.message });
+      }
+      res.status(200).json(result);
+      conn.release();
+    });
   });
 });
 
@@ -50,12 +53,15 @@ router.get("/all", async (req, res, next) => {
 
 function getData(str_query) {
   return new Promise((resolve, reject) => {
-    pool.query(str_query, (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(result);
-      }
+    pool.getConnection((err, conn) => {
+      conn.query(str_query, (err, result) => {
+        conn.release();
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
     });
   });
 }
