@@ -1,7 +1,9 @@
 const express = require("express");
+const app = express();
 const router = express.Router();
 
 const pool = require("../db/pool");
+const config = require("../../config.json")[app.get("env")];
 
 router.use((req, res, next) => {
   res.header(
@@ -33,7 +35,7 @@ router.get("/all", async (req, res, next) => {
   try {
     const tables = await getData("show tables");
     for (const table of tables) {
-      const tablename = table["Tables_in_stock"];
+      const tablename = table["Tables_in_" + config["DB_NAME"]];
       const tableData = await getData(
         `select * from ${tablename} order by time desc limit 20`
       );
