@@ -18,7 +18,10 @@ router.use((req, res, next) => {
 // http/localhost/stockdata?stock_idx=hoge&from=***&to=***
 router.get("/", (req, res, next) => {
   const query_data = req.query;
-  const query_str = `SELECT * FROM ${query_data.stock_idx} WHERE time BETWEEN "${query_data.from}" AND "${query_data.to}"`;
+  const query_str = `
+    SELECT * FROM ${query_data.stock_idx} 
+    WHERE time BETWEEN "${query_data.from}" AND "${query_data.to}" 
+    ORDER BY time DESC`;
   pool.getConnection((err, conn) => {
     conn.query(query_str, (err, result) => {
       if (err) {
