@@ -38,18 +38,32 @@ router.get("/", (req, res, next) => {
 
 router.get("/all", async (req, res, next) => {
   const stockData = {};
+  const regPattern = /^[tT]\d{4}$/;
   try {
     const tables = await getData("show tables");
     for (const table of tables) {
       const tablename = table["Tables_in_" + config["DB_NAME"]];
-      const tableData = await getData(
-        `select * from ${tablename} order by time desc limit 20`
-      );
-      stockData[tablename] = tableData;
+      if (regPattern.test(tablename)) {
+        const tableData = await getData(
+          `select * from ${tablename} order by time desc limit 20`
+        );
+        stockData[tablename] = tableData;
+      }
     }
     res.status(200).json(stockData);
   } catch (e) {
     res.status(500).send({ messgae: e.message });
+    console.log(e);
+  }
+});
+
+router.get("/earnings", async (req, res, next) => {
+  const data = [];
+  try {
+    const earnings = await getData("SELECT * FROM earnings");
+    res.status(200).json(earnings);
+  } catch (e) {
+    res.status(500).send({ message: e.message });
     console.log(e);
   }
 });
